@@ -84,6 +84,32 @@ Hibernate核心接口：
   
   
   
+### 基于云平台的大数据路网流量管控  
+这个是软件工程实践项目，和何金龙、付何山、郭焯荣同学一起做的。  
+* 采用python＋hadoop搭建数据处理后台；
+* 使用mysql作为数据存储数据库； 
+* 采用J2EE设计网站实现前后台的数据交互；
+* 使用百度api显示gps数据分布；
+* 更改数据请求访问方案；
+* 使用百度echart前端控件，异步加载数据。
+![效果图](file/SoftwareEngineeringPractice/hot_map.jpg)  
+  
+数据处理后台给的数据格式是jsonObject：  
+```
+{
+	坐标点序号:[纬度,经度,经过的车辆数目,[车辆经过的时间JSONArray数组]],...
+}
+```
+我做的是前端发送一个时间段，java web后台根据这个时间段从车辆经过的时间JSONArray数组中筛选符合这个时间段的时间，更新经过的车辆数目，将数据返回给前端。  
+发送给前端的LinkedList数据的结点格式：  
+```
+[纬度，经度，经过的车辆数目，[车辆经过的时间JSONArray数组]
+```
+前端根据车辆数目对数据分类，在对应坐标点上加载不同的颜色。  
+  
+  
+  
+  
 ### 联系我  
   
 [github](https://github.com/xuezhaojiang/)用户名:xuezhaojiang  [zhihu](https://www.zhihu.com/people/xuezhaojaing/activities)用户名:个性耀世界  [Email](602431866@qq.com)602431866@qq.com  
