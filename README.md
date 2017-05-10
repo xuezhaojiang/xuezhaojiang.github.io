@@ -66,7 +66,21 @@ web.xml的加载过程。当我们去启动一个WEB项目时，容器包括（J
 * 容器以<context-param></context-param>的name作为键，value作为值，将其转化为键值对，存入ServletContext。
 * 容器创建<listener></listener>中的类实例，根据配置的class类路径<listener-class>来创建监听，在监听中会有contextInitialized(ServletContextEvent args)初始化方法，启动Web应用时，系统调用Listener的该方法，在这个方法中获得：ServletContext application =ServletContextEvent.getServletContext();context-param的值= application.getInitParameter("context-param的键");得到这个context-param的值之后，你就可以做一些操作了。举例：你可能想在项目启动之前就打开数据库，那么这里就可以在<context-param>中设置数据库的连接方式（驱动、url、user、password），在监听类中初始化数据库的连接。这个监听是自己写的一个类，除了初始化方法，它还有销毁方法，用于关闭应用前释放资源。比如:说数据库连接的关闭，此时，调用contextDestroyed(ServletContextEvent args)，关闭Web应用时，系统调用Listener的该方法。  
 * 接着，容器会读取<filter></filter>，根据指定的类路径来实例化过滤器。  
-* 以上都是在WEB项目还没有完全启动起来的时候就已经完成了的工作。如果系统中有Servlet，则Servlet是在第一次发起请求的时候被实例化的，而且一般不会被容器销毁，它可以服务于多个用户的请求。所以，Servlet的初始化都要比上面提到的那几个要迟。
+* 以上都是在WEB项目还没有完全启动起来的时候就已经完成了的工作。如果系统中有Servlet，则Servlet是在第一次发起请求的时候被实例化的，而且一般不会被容器销毁，它可以服务于多个用户的请求。所以，Servlet的初始化都要比上面提到的那几个要迟。  
+2. 控制器根据配置文件controller.xml来决定把请求分发给哪个action以及将请求处理结果转到哪个页面。  
+3. 配置文件中添加拦截器节点，利用拦截器实现日志记录。  
+4. XSL转换机制可以指定将xml文档转化为其他格式的规则。需要提供xslt样式表，它描述xml向某种其他格式转换的规则。xslt处
+理器将读入xml文档和这个样式表，并产生相应的输出。本次作业中就是将xml文档转换为html文档，供浏览器显示。  
+5. 用访问数据库的方式来获取数据。DAO是data access object数据访问接口，既然是对数据的访问，就是与数据库打交
+道。访问数据库过程：加载驱动类；通过url、username、password获取数据库连接；创建一个Statement对象，Statement对象用于将SQL语句发送到数据库中；执行sql；解析查询结果、关闭数据库连接。  
+Hibernate核心接口：  
+* Configuration接口，Configuration负责管理Hibernate的配置信息。  
+* SessionFactory接口。SessionFactory负责创建Session实例，可以通过Configuration实例构建SessionFactory。SessionFactory保存了对应当前数据库配置的所有映射关系，采用了线程安全的设计，可由多个线程并发调用。  
+* Session接口。Session是Hibernate持久化操作的基础，提供了众多持久化方法，如save、update、delete等。通过这些方法，透明地完成对象的增删改查等操作。同时，值得注意的是，Hibernate Session的设计是非线程安全的，即一个Session实例同时只可由一个线程使用。  
+* Transaction接口。Transaction是Hibernate中进行事务操作的接口，Transaction 接口是对实际事务实现的一个抽象，这些实现包括JDBC的事务、JTA 中的UserTransaction，甚至可以是CORBA事务。  
+* Query接口。Query接口，用于执行HQL语句。Query和HQL是分不开的。HQL是Hibernate Query Language的缩写。SQL的操作对象是数据表和列表等对象，而HQL操作对象是类、实例和属性等。  
+6. 通过配置文件中获得数据库连接信息和Bean和数据表的对应信息。还有实现延迟加载。  
+7. 在配置文件中写各个bean的依赖关系，和依赖注入。  
   
   
   
