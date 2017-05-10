@@ -4,11 +4,11 @@
 
 ### 天文数据压缩算法的研究  
 这个是在大二的暑假和大三上学期里做的。当时是想用硬件实现，奈何verilog的逻辑始终理解不了。现在看来我当时做的好水呀，尤其是这论文和ppt写的，一点也不规范。    
-#### 1.使用Huffman编码  
+#### 1. 使用Huffman编码  
 算法的关键在于统计出各符号出现的频率，以及正确建立哈夫曼树。算法比较简单。但是需要两次扫描，而且解压缩需要编码表。  
 频率在高的字符几乎占到了总字符的50%，这就意味着，剩下的字符出现的频率相差无几，并且由于建立哈夫曼树硬件上实现比较困难，这样建立哈夫曼树的效果就显得没有必要。  
 如果将出现频率最高的字符用一个字节代替，而剩余的字节在原基础上扩充一位，这样压缩或每个字符的平均字节数约为1×50%+（8+1）×50%=4.5。压缩比约为4.5⁄8=56.25%。  
-#### 2.LZW编码  
+#### 2. LZW编码  
 LZW是通过建立一个字符串表，用较短的代码来表示较长的字符串来实现压缩。 应该注意到的是，这里的编译表不是事先创建好的，而是根据原始文件数据动态创建的，解码时还要从已编码的数据中还原出原来的编译表。
 
 LZW算法基于字典，压缩有3个重要的对象：数据流(Char Stream)、编码流(Code Stream)和编译表(String Table)。  
@@ -25,7 +25,7 @@ LZW编码只需扫描一次数据，无需有关输入数据统计量的先验�
   
 
 ### 纳米低温手术过程实验研究  
-这个是本科毕业论文，客观来说，没啥技术含量，就是自己做了个探针，堆时间做实验。这篇论文在格式、架构上个人不谦虚地说————堪称完美。文章的组织和解决问题的分析过程，都体现出物理学出身的思路。  
+这个是本科毕业论文，看起来又是纳米又是低温的，其实核心技术是测温，而且是用很low的热电偶测温。客观来说，没啥技术含量，就是自己做了个探针，堆时间做实验。这篇论文在格式、架构上个人不谦虚地说————堪称完美。文章的组织和解决问题的分析过程，都体现出物理学出身的思路。  
 在测量纳米粒子浓度对降温速率影响时，发现实验难点首先在于每次实验冷刀的工作状态不同，这导致即使相同浓度的纳米粒子降温速率也不尽相同；其次测温度用的探针尺寸不能太大，而且探针的位置应尽量保证不变， 这两个原因导致难以对比出不同浓度的纳米粒子对降温速率的影响。为了解决这两个问题，我制作了如下图的装置。  
 ![体膜盒](file/GraduateThesis/box.jpg)  
 ![体膜盒的盖子](file/GraduateThesis/cover.jpg)  
@@ -42,7 +42,7 @@ ps:深入理解计算机系统这本书刚学的时候感觉好，后来再看�
 ### 算法  
 主要实现过链表、红黑树极其可视化输出、图的遍历和Dijkstra最短路径、快速排序。  
 [github链接](https://github.com/xuezhaojiang/Algorithm)  
-数据结构这本书我居然还有内容没看呢，还得再研究研究。
+数据结构这本书我居然还有内容没看呢，还得再研究研究。  
   
 
 
@@ -58,9 +58,18 @@ tcp是在运输层来检查是否有丢失数据，udp并不检查这一点，�
   
   
 ### 轻量级J2EE框架应用  
+1. 理解MVC(Model View Controller)架构，http request在Web Container中的处理流程  
+servlet编程，需要引用以下两个类和接口：javax.servlet和javax.servlet.http。当Servlet类实例化后，容器加载init，以通知servlet它已进入服务行列。init方法必须被加载，Servelt才能接收和请求。如果要载入数据库驱动程序、初始化一些值等等，程序员可以重写这个方法。在其他情况下，这个方法一般为空。service方法由Servlet容器调用，以允许Servlet响应一个请求。Servlet容器传递javax.servlet.ServletRequest 对象和 javax.servlet.ServletResponse对象。ServletRequest对象包含客户端HTTP请求信息，ServletResponse则封装servlet响应。这两个对象，可以写一些需要servlet怎样服务和客户怎样请求的代码。从service中删除Servlet实例之前，容器调用destroy方法。在servlet容器关闭或servlet容器需要更多的内存时，就调用它。这个方法只有在servlet的service方法内的所有线程都退出的时候，或在超时的时候才会被调用。在servlet容器调用destroy方法之后，它将不再调用servlet的service方法。destroy方法给了servlet机会，来清除所有候住的资源（比如：内存，文件处理和线程），以确保在内存中所有的持续状态和servlet的当前状态是同步的。  
+web.xml的加载过程。当我们去启动一个WEB项目时，容器包括（JBoss、Tomcat等）首先会读取项目web.xml配置文件里的配置，当这一步骤没有出错并且完成之后，项目才能正常地被启动起来。
+* 启动WEB项目的时候，容器首先会去它的配置文件web.xml读取两个节点:<listener></listener>和<context-param></context-param>。
+* 紧接着，容器创建一个ServletContext（application），这个WEB项目所有部分都将共享这个上下文。
+* 容器以<context-param></context-param>的name作为键，value作为值，将其转化为键值对，存入ServletContext。
+* 容器创建<listener></listener>中的类实例，根据配置的class类路径<listener-class>来创建监听，在监听中会有contextInitialized(ServletContextEvent args)初始化方法，启动Web应用时，系统调用Listener的该方法，在这个方法中获得：ServletContext application =ServletContextEvent.getServletContext();context-param的值= application.getInitParameter("context-param的键");得到这个context-param的值之后，你就可以做一些操作了。举例：你可能想在项目启动之前就打开数据库，那么这里就可以在<context-param>中设置数据库的连接方式（驱动、url、user、password），在监听类中初始化数据库的连接。这个监听是自己写的一个类，除了初始化方法，它还有销毁方法，用于关闭应用前释放资源。比如:说数据库连接的关闭，此时，调用contextDestroyed(ServletContextEvent args)，关闭Web应用时，系统调用Listener的该方法。  
+* 接着，容器会读取<filter></filter>，根据指定的类路径来实例化过滤器。  
+* 以上都是在WEB项目还没有完全启动起来的时候就已经完成了的工作。如果系统中有Servlet，则Servlet是在第一次发起请求的时候被实例化的，而且一般不会被容器销毁，它可以服务于多个用户的请求。所以，Servlet的初始化都要比上面提到的那几个要迟。
   
-
-
+  
+  
 ### 联系我  
   
 [github](https://github.com/xuezhaojiang/)用户名:xuezhaojiang  [zhihu](https://www.zhihu.com/people/xuezhaojaing/activities)用户名:个性耀世界  [Email](602431866@qq.com)602431866@qq.com  
@@ -69,6 +78,6 @@ tcp是在运输层来检查是否有丢失数据，udp并不检查这一点，�
 ### 最后以几句名言结尾，用以自勉。  
 皇叔刘备劝勉刘禅时说的话  
 > 勿以恶小而为之，勿以善小而不为。  
-  
+
 颜回回答孔子的话  
 > 孔子曰：“回，诗云‘匪兕匪虎，率彼旷野’。吾道非邪？吾何为于此？”颜回曰：“夫子之道至大，故天下莫能容。虽然，夫子推而行之，不容何病，不容然后见君子！夫道之不修也，是吾丑也。夫道既已大修而不用，是有国者之丑也。不容何病，不容然后见君子！”  
