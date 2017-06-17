@@ -35,7 +35,7 @@ LZW编码只需扫描一次数据，无需有关输入数据统计量的先验�
 相关文件：[毕业论文](file/GraduateThesis/薛兆江本科毕业论文.pdf)  [实验记录](file/GraduateThesis/薛兆江本科毕业论文实验记录.pdf)  
   
 ### Linux内核分析  
-跟着课程一共写了8篇博客，详细可见连接[Linux内核分析](https://xuezhaojiang.github.io/LinuxCore/)。主要是函数调用堆栈、中断机制、进程调度。  
+跟着课程一共写了8篇博客，详细可见连接[Linux内核分析](https://xuezhaojiang.github.io/LinuxKernel/)。主要是函数调用堆栈、中断机制、进程调度。  
 ps:深入理解计算机系统这本书刚学的时候感觉好，后来再看是真的好。这本书是真的强，什么都有，值得细细研读。  
   
   
